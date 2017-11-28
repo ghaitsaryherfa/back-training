@@ -1,0 +1,4 @@
+RewriteEngine On
+
+RewriteRule ^api/penyakit/([a-zA-Z0-9]+)$ penyakit/read_one.php?kode_penyakit=$1
+RewriteRule ^api/penyakit/([a-zA-Z0-9]+)/$ penyakit/read_one.php?kode_penyakit=$1
