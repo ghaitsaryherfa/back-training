@@ -1,11 +1,15 @@
 <?php
 class Database{
     //database credential
-    private $host = "localhost";
-    private $db_name = "sistem_pakar";
+    private $host = "ap-cdbr-azure-southeast-b.cloudapp.net";
+	//private $host = "localhost";
+	private $db_name = "rumaji";
+    //private $db_name = "sistem_pakar";
     //private $db_name = "api_db";
-    private $db_user = "root";
-    private $db_pass = "";
+	private $db_user = "baaafb453f5db3";
+    //private $db_user = "root";
+	private $db_pass = "d2e42ccf";
+    //private $db_pass = "";
     public $conn;
 
     //get the database connection
