@@ -52,15 +52,21 @@
                 $i = 0;
             }
             else{
-                echo "0 results";
+                echo json_encode(
+                    array("message" => "No penyakit found.".$row["kode_gejala"])
+                );
             }
         }
         if (!$stmt_insert){
             echo "Gagal memasukan data";
         }
+
+        include('hasil.php');
     }
     else{
-        echo "0 results";
+        echo json_encode(
+            array("message" => "No gejala found.")
+        );
     }
     
 ?>
