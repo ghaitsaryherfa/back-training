@@ -1,8 +1,10 @@
 <?php
     include('forwardchaining.php');
     
-    $hasil = "select * from tmp_hasil";
-    $execute = mysqli_query ($conn, $hasil);
+    // $hasil = "select * from tmp_hasil";
+    // $stmt_hasil = $conn->prepare( $hasil );
+    // $stmt_hasil->execute();
+    // $execute = mysqli_query ($conn, $hasil);
     
 //    echo "
 //    <table>
@@ -59,21 +61,31 @@
     //menjumlahkan gejala yang diinput
     for($i=0; $i<count($kodepenyakit); $i++){
         $sqlcari = "select ".$kodepenyakit[$i]." from tmp_hasil";
-        $execute = mysqli_query($conn, $sqlcari);
-        while ($row = mysqli_fetch_assoc($execute)){
+        $stmt_cari = $conn->prepare( $sqlcari );
+        $stmt_cari->execute();
+        // $execute = mysqli_query($conn, $sqlcari);
+        while ($row = $stmt_cari->fetch(PDO::FETCH_ASSOC)){
             $input = $input+$row[$kodepenyakit[$i]];
         }
 
         $sqlhasil = "select kode_gejala from relasi where kode_penyakit = '".$kodepenyakit[$i]."'";
-        $exhasil = mysqli_query ($conn, $sqlhasil);
-        $jmlhasil = mysqli_num_rows($exhasil);
+        $stmt_hasil = $conn->prepare( $sqlhasil );
+        $stmt_hasil->execute();
+        // $exhasil = mysqli_query ($conn, $sqlhasil);
+        $jmlhasil = $stmt_hasil->rowCount();
         $persentase[$i] = ($input/$jmlhasil)*100;
         $input = 0.0;
         
         $sqlnama = "select nama_penyakit from penyakit where kode_penyakit = '".$kodepenyakit[$i]."'";
-        $exsqlnama = mysqli_query ($conn, $sqlnama);
-        while ($row = mysqli_fetch_assoc ($exsqlnama)){
-            $temp_array = [$row["nama_penyakit"] => $persentase[$i]];
+        $stmt_nama = $conn->prepare( $sqlnama );
+        $stmt_nama->execute();
+        // $exsqlnama = mysqli_query ($conn, $sqlnama);
+        while ($row = $stmt_nama->fetch(PDO::FETCH_ASSOC)){
+            // $temp_array = [$row["nama_penyakit"] => $persentase[$i]];
+            $temp_array = [
+                "nama_penyakit" => $row["nama_penyakit"],
+                "persentase" => $persentase[$i]
+            ];
             array_push ($hasil_akhir, $temp_array);
 //            echo $row["nama_penyakit"];
         }

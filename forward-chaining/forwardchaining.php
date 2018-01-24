@@ -1,12 +1,26 @@
 <?php
-    include ('connect.php');
-    
+    // include ('connect.php');
+    //require header
+    header("Access-Control-Allow-Origin: *");
+    header("Content-Type: application/json; charset=UTF-8");
+
+    //include database and object files
+    include_once '../config/database.php';
+
+    //instantiate databse and product object
+    $database = new Database();
+    $conn = $database->getConnection();
+        
     $sql_clear = "delete from tmp_hasil";
-    $clear = mysqli_query ($conn, $sql_clear);
+    $stmt_clear = $conn->prepare( $sql_clear );
+    $stmt_clear->execute();
+    // $clear = mysqli_query ($conn, $sql_clear);
     
     
     $sql_tmpgejala = "select * from tmp_gejala";
-    $eksekusi = mysqli_query ($conn, $sql_tmpgejala);
+    $stmt_tmpgejala = $conn->prepare( $sql_tmpgejala );
+    $stmt_tmpgejala->execute();
+    // $eksekusi = mysqli_query ($conn, $sql_tmpgejala);
 
     $kode_gejala = '';
     $kode_penyakit = '';
@@ -14,17 +28,19 @@
     $i=0;
 
     
-    if (mysqli_num_rows ($eksekusi) >0 ){
-        while ($row = mysqli_fetch_assoc($eksekusi)){
+    if ($stmt_tmpgejala->rowCount() >0 ){
+        while ($row = $stmt_tmpgejala->fetch(PDO::FETCH_ASSOC)){
 //            echo $row["kode_gejala"]."<br>"; // G03
             $kode_gejala = $row["kode_gejala"];
             $query = "select p.kode_penyakit from penyakit p inner join relasi r on 
             p.kode_penyakit = r.kode_penyakit inner join tmp_gejala tg on 
             r.kode_gejala = tg.kode_gejala where tg.kode_gejala = '".$row["kode_gejala"]."'";
-            $sql_query = mysqli_query ($conn, $query);
+            $stmt_query = $conn->prepare( $query );
+            $stmt_query->execute();
+            // $sql_query = mysqli_query ($conn, $query);
             
-            if (mysqli_num_rows ($sql_query) > 0){
-                while ($row = mysqli_fetch_assoc($sql_query)){
+            if ($stmt_query->rowCount() > 0){
+                while ($row = $stmt_query->fetch(PDO::FETCH_ASSOC)){
 //                    echo $row["kode_penyakit"]."<br>"; // P02                   
                     $kode_penyakit = $row["kode_penyakit"];
                     $insert = '';
@@ -35,7 +51,9 @@
                     else{
                         $insert = "update tmp_hasil set ".$kode_penyakit." = 1 where kode_gejala='".$kode_gejala."'";
                     }
-                    $insert_eksekusi = mysqli_query ($conn, $insert);
+                    $stmt_insert = $conn->prepare( $insert );
+                    $stmt_insert->execute();
+                    // $insert_eksekusi = mysqli_query ($conn, $insert);
                     $i++;
                 }
                 
@@ -45,7 +63,7 @@
                 echo "0 results";
             }
         }
-        if (!$insert_eksekusi){
+        if (!$stmt_insert){
             echo "Gagal memasukan data";
         }
     }
