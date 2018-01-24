@@ -40,12 +40,19 @@ if($num_pertanyaan>0){
         while($row_jawaban = $stmt_jawaban->fetch(PDO::FETCH_ASSOC)){
             //extract row, this will make $row['name] to just $name only
             extract($row_jawaban);
-            
-            array_push($jawaban_arr, $nama_gejala);
+            $temp_array = [
+                "kode_gejala" => $kode_gejala,
+                "nama_gejala" => $nama_gejala
+            ];
+            array_push($jawaban_arr, $temp_array);
         }
 
         if ($i > 1) {
-            array_push($jawaban_arr, 'Tidak');
+            $temp_array = [
+                "kode_gejala" => "G00",
+                "nama_gejala" => "Tidak"
+            ];
+            array_push($jawaban_arr, $temp_array);
         } else {
             $i++;
         }

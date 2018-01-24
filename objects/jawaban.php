@@ -17,7 +17,7 @@ class Jawaban{
     public function readByPertanyaan($kode_pertanyaan){
         //select all data
         $query = "SELECT
-                    g.nama_gejala
+                    g.kode_gejala, g.nama_gejala
                 FROM
                     " . $this->table_name . " j, gejala g
                 WHERE
@@ -30,6 +30,25 @@ class Jawaban{
         $stmt->execute();
  
         return $stmt;
+    }
+
+    public function addJawaban($kode_gejala){
+        //insert into tmp_gejala
+        $query = "INSERT INTO
+                    tmp_gejala (kode_gejala)
+                    VALUES ('".$kode_gejala."')
+                    ";
+        $this->conn->exec($query);
+ 
+        return "success";
+    }
+
+    public function deleteJawaban(){
+        //insert into tmp_gejala
+        $query = "DELETE FROM tmp_gejala";
+        $this->conn->exec($query);
+ 
+        return "success";
     }
 }
 ?>
