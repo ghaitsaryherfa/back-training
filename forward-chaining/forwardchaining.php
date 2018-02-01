@@ -1,10 +1,10 @@
 <?php
-    //require header
-    header("Access-Control-Allow-Origin: *");
-    header("Content-Type: application/json; charset=UTF-8");
+    // //require header
+    // header("Access-Control-Allow-Origin: *");
+    // header("Content-Type: application/json; charset=UTF-8");
 
-    //include database and object files
-    include_once '../config/database.php';
+    // include database and object files
+    // include_once '../config/database.php';
 
     //instantiate databse and product object
     $database = new Database();
@@ -21,7 +21,7 @@
     $kode_gejala = '';
     $kode_penyakit = '';
     $insert_eksekusi = '';
-    $i=0;
+    $m = 0;
 
     
     if ($stmt_tmpgejala->rowCount() >0 ){
@@ -38,7 +38,7 @@
                     $kode_penyakit = $row["kode_penyakit"];
                     $insert = '';
                     
-                    if($i==0){
+                    if($m==0){
                         $insert = "insert into tmp_hasil (kode_gejala,".$kode_penyakit.") values ('".$kode_gejala."', 1)";
                     }
                     else{
@@ -46,10 +46,10 @@
                     }
                     $stmt_insert = $conn->prepare( $insert );
                     $stmt_insert->execute();
-                    $i++;
+                    $m++;
                 }
                 
-                $i = 0;
+                $m = 0;
             }
             else{
                 echo json_encode(
