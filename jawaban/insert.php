@@ -41,9 +41,6 @@ if (!isset($input[0]["jawaban"])) {
                 $insert = $jawaban->addJawaban($kode_gejala);
         
                 if ($n == count($kode_gejala_arr)-1 && $insert == "success") {
-                    // echo json_encode(
-                    //     array("message" => "Data has been added successfully.")
-                    // );
                     include('../forward-chaining/forwardchaining.php');
                 }
                 else if($n == count($kode_gejala_arr)-1){
